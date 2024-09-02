@@ -204,8 +204,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Competition'
 
-
-
 components:
   schemas:
     Competition:

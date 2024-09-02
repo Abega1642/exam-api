@@ -74,6 +74,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Team'
     get:
+      tags:
+        - Teams
       summary: get all team Lists
       parameters:
         - name: teamName
@@ -103,7 +105,28 @@ paths:
 
   /players:
     post:
+      tags:
+        - Players
       summary: create players
+      operationId: createPlayer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Player'
+      responses:
+        201:
+          description: player created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+    put:
+      tags:
+        - Players
+      summary: modify players
+      operationId: updatePlayer
       requestBody:
         required: true
         content:
@@ -118,6 +141,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Player'
     get:
+      tags:
+        - Players
       summary: get all players of a specific team
       parameters:
         - name: teamName
@@ -151,6 +176,8 @@ paths:
 
   /teams/{teamName}/competitions:
     post:
+      tags:
+        - Teams
       summary: get all competition of a specified team
       parameters:
         - name: teamName
@@ -180,14 +207,15 @@ paths:
 
   /teams/{teamName}/players:
     post:
-      summary: "Transfer players to a team"
+      tags:
+        - Teams
       parameters:
         - name: teamName
           in: path
           required: true
           schema:
             type: string
-          description: "ID of the team to transfer players to"
+            example: "FC BARCELONA"
       requestBody:
         required: true
         content:

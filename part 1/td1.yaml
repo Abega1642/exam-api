@@ -1,0 +1,259 @@
+openapi: "3.0.3"
+info:
+  title: API Final TD - STD23028
+  version: "1.0.0"
+servers:
+  - url: https://localhost.std23028
+paths:
+  /competitions:
+    post:
+      tags:
+        - Competition
+      summary: create new competition
+      operationId: createACompetition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Competition'
+      responses:
+        '201':
+          description: competition created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+    get:
+      tags:
+        - Competition
+      summary: get all competitions
+      operationId: getAllCompetition
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 12
+          description: "Page number for pagination"
+        - name: pageSize
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 50
+          description: "Number of items per page"
+      responses:
+        '200':
+          description: all list of available competition
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competition'
+
+  /teams:
+    post:
+      tags:
+        - Teams
+      summary: create new team
+      operationId: createTeam
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Team'
+      responses:
+        201:
+          description: Team created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+    get:
+      summary: get all team Lists
+      parameters:
+        - name: teamName
+          in: query
+          schema:
+            type: string
+            example: "FC BARCELONA"
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: all team filtered taem list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+
+  /players:
+    post:
+      summary: create players
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Player'
+      responses:
+        201:
+          description: player created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+    get:
+      summary: get all players of a specific team
+      parameters:
+        - name: teamName
+          in: query
+          schema:
+            type: string
+            example: "FC BARCELONA"
+        - name: playerName
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: all players list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Player'
+
+  /teams/{teamName}/competitions:
+    post:
+      summary: get all competition of a specified team
+      parameters:
+        - name: teamName
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "FC BARCELONA"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Competition'
+      responses:
+        200:
+          description: team associated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competition'
+
+
+  /teams/{teamName}/players:
+    post:
+      summary: "Transfer players to a team"
+      parameters:
+        - name: teamName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: "ID of the team to transfer players to"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Player'
+      responses:
+        200:
+          description: "Players successfully transferred to the team"
+
+components:
+  schemas:
+    Competition:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "LIGA"
+        location:
+          oneOf:
+            - type: string
+              example: "SPAIN"
+            - type: string
+              example: "EUROPE"
+      required:
+        - name
+        - location
+
+    Team:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "FC BARCELONA"
+        slogan:
+          type: string
+          description: "FC BARCELONA SLOGAN"
+        competitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Competition'
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/Player'
+      required:
+        - name
+        - slogan
+
+    Player:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Leonel Messi"
+        number:
+          type: integer
+          format: int32
+          example: 10
+        strongFoot:
+          type: string
+          enum: ["Left", "Right"]
+          description: "The strong foot of the player (Left or Right)"
+      required:
+        - name
+        - number
+        - strongFoot

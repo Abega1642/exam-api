@@ -150,10 +150,13 @@ paths:
           schema:
             type: string
             example: "FC BARCELONA"
+          required: true
         - name: playerName
           in: query
+          required: true
           schema:
             type: string
+            example: "Leo Messi"
         - name: page
           in: query
           required: true

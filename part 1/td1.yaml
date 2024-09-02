@@ -205,28 +205,6 @@ paths:
                   $ref: '#/components/schemas/Competition'
 
 
-  /teams/{teamName}/players:
-    post:
-      tags:
-        - Teams
-      parameters:
-        - name: teamName
-          in: path
-          required: true
-          schema:
-            type: string
-            example: "FC BARCELONA"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/Player'
-      responses:
-        200:
-          description: "Players successfully transferred to the team"
 
 components:
   schemas:
